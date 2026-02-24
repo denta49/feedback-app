@@ -1,10 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Layout({
+import { getSession } from "@/lib/auth/session";
+
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200">
       <nav className="sticky top-0 z-10 border-b border-slate-800 bg-slate-900">
