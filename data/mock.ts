@@ -1,4 +1,5 @@
-import { Feedback } from "../types/feedback";
+import { Feedback } from "@/schemas/feedback";
+
 import { User } from "../types/user";
 
 export const mockUsers: User[] = [
