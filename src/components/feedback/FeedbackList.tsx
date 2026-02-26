@@ -1,6 +1,5 @@
 import FeedbackItem from "@/components/feedback/FeedbackItem";
-
-import { Feedback } from "../../../types/feedback";
+import { Feedback } from "@/schemas/feedback";
 
 type Props = {
   feedbacks: Feedback[];

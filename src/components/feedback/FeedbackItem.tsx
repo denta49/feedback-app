@@ -1,4 +1,4 @@
-import { Feedback } from "../../../types/feedback"; // Zaktualizuj ścieżkę jeśli trzeba
+import { Feedback } from "@/schemas/feedback";
 
 type Props = {
   feedback: Feedback;
