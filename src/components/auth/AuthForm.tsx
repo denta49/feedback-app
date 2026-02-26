@@ -1,5 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { loginSchema, RegisterInput, registerSchema } from "@/schemas/auth";
@@ -15,14 +17,25 @@ export default function AuthForm({ type }: Props) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
-    resolver: zodResolver(registerSchema),
+    // this any here is necessary when building dynamic form with Zod + RHF
+    resolver: zodResolver(currentSchema as unknown as any),
   });
-
+  const router = useRouter();
   const onSubmit = async (data: RegisterInput) => {
-    if (type === "login") {
-      //axios
-    } else {
-      //axios
+    try {
+      if (type === "login") {
+        await axios.post("/api/auth/login", { email: data.email, password: data.password });
+      } else {
+        await axios.post("/api/auth/register", {
+          email: data.email,
+          name: data.name,
+          password: data.password,
+          passwordConfirmation: data.passwordConfirmation,
+        });
+      }
+      router.push("/app");
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -38,7 +51,6 @@ export default function AuthForm({ type }: Props) {
         />
         {errors.email && <span className="text-xs text-red-400">{errors.email.message}</span>}
       </div>
-
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium text-slate-400">Hasło</label>
         <input
@@ -49,7 +61,6 @@ export default function AuthForm({ type }: Props) {
         />
         {errors.password && <span className="text-xs text-red-400">{errors.password.message}</span>}
       </div>
-
       {type === "register" && (
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-slate-400">Powtórz hasło</label>
@@ -64,7 +75,17 @@ export default function AuthForm({ type }: Props) {
           )}
         </div>
       )}
-
+      {type === "register" && (
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-slate-400">Imię i nazwisko</label>
+          <input
+            {...register("name")}
+            placeholder="Jan Kowalski"
+            className="rounded-lg border border-slate-700 bg-slate-950 p-3 text-white"
+          />
+          {errors.name && <span className="text-xs text-red-400">{errors.name.message}</span>}
+        </div>
+      )}
       <button
         type="submit"
         disabled={isSubmitting}

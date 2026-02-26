@@ -9,14 +9,17 @@ export async function POST(request: Request) {
     if (!email || !name || !password) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
-    mockUsers.find((u) => u.email === email) &&
-      NextResponse.json({ error: "User already exists" }, { status: 400 });
-    mockUsers.push({
-      id: (mockUsers.length + 1).toString(),
-      email,
-      name,
-      role: "user",
-    });
+    if (mockUsers.find((u) => u.email === email)) {
+      return NextResponse.json({ error: "User already exists" }, { status: 409 });
+    } else {
+      mockUsers.push({
+        id: (mockUsers.length + 1).toString(),
+        email,
+        name,
+        role: "user",
+      });
+      return NextResponse.json({ message: "User registered successfully" }, { status: 200 });
+    }
   } catch (e) {
     console.error("Registration error:", e);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -8,6 +8,7 @@ export const loginSchema = z.object({
 export const registerSchema = loginSchema
   .extend({
     passwordConfirmation: z.string().min(6),
+    name: z.string().min(1, { message: "Name is required" }),
   })
   .refine((data) => data.passwordConfirmation === data.password, {
     message: "Passwords do not match",
