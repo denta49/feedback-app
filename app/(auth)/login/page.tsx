@@ -1,3 +1,4 @@
+import AuthForm from "@/components/auth/AuthForm";
 import Container from "@/components/ui/Container";
 
 export default function LoginPage() {
@@ -6,7 +7,7 @@ export default function LoginPage() {
       <Container>
         <div className="mx-auto max-w-md rounded-xl border border-slate-800 bg-slate-900 p-8">
           <h1 className="mb-6 text-center text-2xl font-bold text-white">Logowanie</h1>
-          {/* Tu będzie formularz */}
+          <AuthForm type={"login"} />
         </div>
       </Container>
     </div>
